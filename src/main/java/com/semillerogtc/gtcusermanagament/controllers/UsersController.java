@@ -1,9 +1,10 @@
 package com.semillerogtc.gtcusermanagament.controllers;
 
+import com.semillerogtc.gtcusermanagament.common.EnvironmentService;
 import com.semillerogtc.gtcusermanagament.domain.Usuario;
 import com.semillerogtc.gtcusermanagament.services.UsersService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersController {
 
     UsersService _user;
+    EnvironmentService environmentService;
 
     /**
      * Diferentes tipos de inyección
@@ -33,8 +35,12 @@ public class UsersController {
     */
 
     //Inyección por constructor
-    UsersController(UsersService user) {
+    //Qualifier la primera letra en minúscula
+    UsersController(UsersService user,@Qualifier(value="devEnvironmentService") EnvironmentService environmentService) {
         _user = user;
+        this.environmentService = environmentService;
+        log.info("Se ejecuta constructor inicializar");
+        log.info("Ambiente configurado: " + environmentService.getEnvironmentName());
     }
 
     @GetMapping("/ping")
